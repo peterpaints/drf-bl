@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.coverage
+static-collected
+drfenv/
+
+.DS_Store
+static/.DS_Store
+
+.idea/
