@@ -109,7 +109,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'api.serializers.StandardResultsSetPagination'
 }
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
