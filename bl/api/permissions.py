@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission
-from .models import Bucketlist
+from .models import Bucketlist, Item
 
 
 class IsOwner(BasePermission):
@@ -8,4 +8,9 @@ class IsOwner(BasePermission):
         """Return True if user is bucketlist's owner."""
         if isinstance(obj, Bucketlist):
             return obj.created_by == request.user
-        return obj.created_by == request.user
+        elif isinstance(obj, Item):
+            bucket = Bucketlist.objects.get(id=obj.bucketlist.id)
+            if bucket:
+                return True
+            else:
+                return False
