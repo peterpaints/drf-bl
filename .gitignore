@@ -3,6 +3,7 @@ __pycache__/
 .coverage
 static-collected
 drfenv/
+*.sqlite3
 
 .DS_Store
 static/.DS_Store
