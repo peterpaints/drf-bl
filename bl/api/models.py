@@ -22,7 +22,7 @@ class Bucketlist(models.Model):
 class Item(models.Model):
     """Model the bucketlist item table."""
 
-    name = models.CharField(max_length=255, unique=True, blank=False)
+    name = models.CharField(max_length=255, unique=True, blank=True)
     bucketlist = models.ForeignKey(Bucketlist, related_name="items",
                                    on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -37,4 +37,7 @@ class Item(models.Model):
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
-        Token.object.create(user=instance)
+        try:
+            Token.object.create(user=instance)
+        except AttributeError:
+            pass
