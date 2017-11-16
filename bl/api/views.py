@@ -3,8 +3,6 @@ from .serializers import BucketlistSerializer, ItemSerializer, UserSerializer
 from .models import Bucketlist, Item
 from django.contrib.auth.models import User
 from .permissions import IsOwner
-from rest_framework import status
-from rest_framework.response import Response
 
 
 class BucketlistView(generics.ListCreateAPIView):
