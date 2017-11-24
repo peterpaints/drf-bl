@@ -18,6 +18,7 @@ class BucketlistView(generics.ListCreateAPIView):
     def get_queryset(self):
         """Implement searching with parameter 'q'."""
         queryset = Bucketlist.objects.all()
+        queryset = queryset.filter(created_by=self.request.user)
         q = self.request.query_params.get('q', None)
         if q is not None:
             queryset = queryset.filter(name__icontains=q)
@@ -36,10 +37,6 @@ class ItemView(generics.ListCreateAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     permission_classes = (permissions.IsAuthenticated, IsOwner)
-
-    def perform_create(self, serializer):
-        """Save post data to db."""
-        serializer.save()
 
 
 class ItemDetailsView(generics.RetrieveUpdateDestroyAPIView):
