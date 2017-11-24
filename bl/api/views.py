@@ -3,6 +3,7 @@ from .serializers import BucketlistSerializer, ItemSerializer, UserSerializer
 from .models import Bucketlist, Item
 from django.contrib.auth.models import User
 from .permissions import IsOwner
+from rest_framework.exceptions import PermissionDenied
 
 
 class BucketlistView(generics.ListCreateAPIView):
@@ -37,6 +38,23 @@ class ItemView(generics.ListCreateAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     permission_classes = (permissions.IsAuthenticated, IsOwner)
+
+    def perform_create(self, serializer):
+        """Save post data to db."""
+        bucketlists = Bucketlist.objects.filter(created_by=self.request.user)
+        bucketlist = bucketlists.filter(id=self.kwargs['pk'])
+        if bucketlist.count() == 0:
+            raise PermissionDenied('You are not allowed to perform this action')
+        else:
+            serializer.save()
+
+    def get_queryset(self):
+        """Override default get."""
+        queryset = Item.objects.all()
+        bucketlists = Bucketlist.objects.filter(created_by=self.request.user)
+        bucketlist = bucketlists.filter(id=self.kwargs['pk'])
+        queryset = queryset.filter(bucketlist=bucketlist)
+        return queryset
 
 
 class ItemDetailsView(generics.RetrieveUpdateDestroyAPIView):
