@@ -10,7 +10,4 @@ class IsOwner(BasePermission):
             return obj.created_by == request.user
         elif isinstance(obj, Item):
             bucket = Bucketlist.objects.get(id=obj.bucketlist.id)
-            if bucket:
-                return True
-            else:
-                return False
+            return bucket.created_by == request.user
